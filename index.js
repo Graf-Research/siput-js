@@ -52,7 +52,7 @@ customElements.define("page-tagline", class extends Siput {
           🔥 <b>Direct code</b> into browser without code compiler/transpiler/pre-processor.
         </div>
         <div>
-          🔥 Powered by <b>Web Custom Elements + Proxy API</b> on modern browser, compatible in almost all browsers.
+          🔥 Powered by <b>Web Custom Elements + Proxy</b> on modern browser, compatible in almost all browsers.
         </div>
       </div>
     </div>
