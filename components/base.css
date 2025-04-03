@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+body {
+  font-family: "Libre Franklin", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  min-height: 100vh;
+  background: #edede9;
+  background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(237,237,233,1) 50%, rgba(237,237,233,1) 100%);
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #344e41;
+}
+
+h1 {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.px {
+  padding: 12px 15%;
+}

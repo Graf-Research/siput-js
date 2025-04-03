@@ -5,7 +5,9 @@ class Siput extends HTMLElement {
   is_data_ready = false;
   data = this.__proxy_var;
   html = ``;
-  use_shadow_root = true;
+  use_shadow_root = false;
+
+  custom_element = true;
 
   static stats = {
     total_proxy: 0,
@@ -29,7 +31,11 @@ class Siput extends HTMLElement {
     var mapkv = {};
     for (const attribute of this.attributes) {
       if (attribute.name.startsWith('$')) {
-        mapkv[attribute.name] = this.getRootNode().host[attribute.value].bind(this.getRootNode().host);
+        let pn = this.parentNode;
+        while (pn && !pn.custom_content) {
+          pn = pn.parentNode;
+        }
+        mapkv[attribute.name] = pn[attribute.value].bind(pn);
       } else {
         mapkv[attribute.name] = attribute.value;
       }
@@ -73,6 +79,7 @@ class Siput extends HTMLElement {
 
   connectedCallback() {
     const shadow = this.use_shadow_root ? this.attachShadow({ mode: "open" }) : this;
+    const list_child_node = Array.from(this.childNodes.entries()).map(x => x[1]);
     this.custom_content = this.parseHTML(this.html);
     let child_element_dom = null;
     let tree_walker = document.createTreeWalker(this.custom_content);
@@ -89,7 +96,11 @@ class Siput extends HTMLElement {
 
         switch (current_node.nodeType) {
           case Node.ELEMENT_NODE:
-            for (const attr of current_node.attributes) {
+            // this doesnt work, sometimes attributes missing
+            // for (const attr of current_node.attributes) {
+
+            // use this instead
+            for (const attr of Array.from(current_node.attributes)) {
               if (attr.nodeName === 'ref') {
                 this.ref[attr.nodeValue] = node_object.el;
                 continue;
@@ -179,10 +190,15 @@ class Siput extends HTMLElement {
     this.init();
 
     // add child view
-    const list_child_node = Array.from(this.childNodes.entries()).map(x => x[1]);
     if (child_element_dom && child_element_dom.el) {
       for (const child_node of list_child_node) {
-        child_element_dom.el.parentNode.insertBefore(child_node, child_element_dom.el);
+        try {
+          child_element_dom.el.parentNode.insertBefore(child_node, child_element_dom.el);
+        } catch (err) {
+          console.error(err);
+          console.log(child_node, child_element_dom.el);
+          return;
+        }
       }
       child_element_dom.el.remove()
     }
