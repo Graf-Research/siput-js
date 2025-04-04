@@ -77,6 +77,9 @@ customElements.define("docs-sidebar", class extends Siput {
   }
 
   'attr-active'(val) {
-    this.data[`active_class_${val}`].value = 'active';
+    // TODO: fix lib, this checking should be unnecessary
+    if (this.data[`active_class_${val}`]) {
+      this.data[`active_class_${val}`].value = 'active';
+    }
   }
 });
