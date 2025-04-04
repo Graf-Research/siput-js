@@ -32,7 +32,7 @@ class Siput extends HTMLElement {
     for (const attribute of this.attributes) {
       if (attribute.name.startsWith('$')) {
         let pn = this.parentNode;
-        while (pn && !pn.custom_content) {
+        while (pn && !pn.custom_element) {
           pn = pn.parentNode;
         }
         mapkv[attribute.name] = pn[attribute.value].bind(pn);
