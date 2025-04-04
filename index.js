@@ -12,9 +12,6 @@ customElements.define("main-page", class extends Siput {
       <page-sample-code></page-sample-code>
     </div>
   `;
-
-  init() {
-  }
 });
 
 customElements.define("page-tagline", class extends Siput {
@@ -43,7 +40,7 @@ customElements.define("page-tagline", class extends Siput {
       </div>
       <div class="list-features">
         <div>
-          🔥 <b>Quick way</b> to create a modular website with zero-modules dependency.
+          🔥 <b>Quick way</b> to create a modular website with zero-configuration dependency.
         </div>
         <div>
           🔥 <b>Reactive render</b> variables like ReactJS. Efficient DOM manipulation with minimal DOM updates.
@@ -57,9 +54,6 @@ customElements.define("page-tagline", class extends Siput {
       </div>
     </div>
   `;
-
-  init() {
-  }
 });
 
 customElements.define("page-sample-code", class extends Siput {
@@ -79,7 +73,11 @@ customElements.define("page-sample-code", class extends Siput {
       customElements.define("my-custom-element", class extends Siput {
         html = \`
           <style>
-            .container { display: flex; flex-direction: column; gap: 8px }
+            .container {
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+            }
           </style>
           <div class="container">
             <input type="text" value="{{myvar}}" oninput="updateMyVar" />
@@ -100,21 +98,12 @@ customElements.define("page-sample-code", class extends Siput {
 </html>`;
 
   html = `
-    <style>
-      .code {
-        border-radius: 8px;
-        overflow: hidden;
-      }
-    </style>
-    <pre class="code"><code class="language-html">${this.#escapeHTML(this.html_code)}</code></pre>
+    <code-highlight>${this.#escapeHTML(this.html_code)}</code-highlight>
   `;
 
   #escapeHTML(str) {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
-  }
-
-  init() {
   }
 });

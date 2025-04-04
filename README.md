@@ -41,3 +41,11 @@
   <my-custom-element></my-custom-element>
 </body>
 ```
+
+## Run Development
+
+`cd` into project directory
+
+```bash
+npx http-server -o . -c-1
+```

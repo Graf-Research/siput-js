@@ -13,7 +13,4 @@ customElements.define("main-page", class extends Siput {
       </div>
     </div>
   `;
-
-  init() {
-  }
 });

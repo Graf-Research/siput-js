@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Example</title>
+  </head>
+  <body>
+    <!-- Main Elements -->
+    <my-custom-element></my-custom-element>
+
+    <!-- Scripts -->
+    <script src="https://siput.dev/siput.js"></script>
+    <script>
+      customElements.define("my-custom-element", class extends Siput {
+        html = `
+          <style>
+            .container { display: flex; flex-direction: column; gap: 8px }
+          </style>
+          <div class="container">
+            <input type="text" value="{{myvar}}" oninput="updateMyVar" />
+            <div>Input value: {{ myvar }}</div>
+          </div>
+        `;
+
+        init() {
+          this.data.myvar.value = ''; // init empty value
+        }
+
+        updateMyVar(e) {
+          this.data.myvar.value = e.target.value;
+        }
+      });
+    </script>
+  </body>
+</html>
