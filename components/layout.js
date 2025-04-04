@@ -7,7 +7,8 @@ customElements.define("ca-header", class extends Siput {
         justify-content: space-between;
         padding-top: 24px !important;
         padding-bottom: 24px !important;
-        background: white;
+        background: #FFFB;
+        backdrop-filter: blur(8px);
       }
       header .container-logo {
         display: flex;

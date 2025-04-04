@@ -49,7 +49,7 @@ customElements.define("page-tagline", class extends Siput {
           🔥 <b>Direct code</b> into browser without code compiler/transpiler/pre-processor.
         </div>
         <div>
-          🔥 Powered by <b>Web Custom Elements + Proxy</b> on modern browser, compatible in almost all browsers.
+          🔥 Powered by <b><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components">Web Components</a> + <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy</a></b> on modern browser, compatible in almost all browsers.
         </div>
       </div>
     </div>
@@ -80,8 +80,12 @@ customElements.define("page-sample-code", class extends Siput {
             }
           </style>
           <div class="container">
-            <input type="text" value="{{myvar}}" oninput="updateMyVar" />
-            <div>{{ myvar }}</div>
+            <input
+              type="text"
+              value="{{myvar}}"
+              oninput="updateMyVar"
+              placeholder="Type here" />
+            <div>Input Value: {{ myvar }}</div>
           </div>
         \`;
 
@@ -98,7 +102,35 @@ customElements.define("page-sample-code", class extends Siput {
 </html>`;
 
   html = `
-    <code-highlight>${this.#escapeHTML(this.html_code)}</code-highlight>
+    <style>
+      .page-sample-code {
+        display: flex;
+        gap: 16px;
+      }
+      .page-sample-code > *:first-child {
+        flex: 2;
+      }
+      .page-sample-code > *:last-child {
+        flex: 1;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0px 1px 32px 1px rgba(0,0,0,.08);
+      }
+      .page-sample-code iframe {
+        background: white;
+        border: none;
+      }
+    </style>
+    <div class="page-sample-code">
+      <code-highlight>${this.#escapeHTML(this.html_code)}</code-highlight>
+      <div>
+        <div style="padding: 8px; background: #F7F7F7; font-weight: bold;">
+          Output
+        </div>
+        <iframe src="/sample.html"></iframe>
+      </div>
+    </div>
   `;
 
   #escapeHTML(str) {

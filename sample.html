@@ -13,11 +13,19 @@
       customElements.define("my-custom-element", class extends Siput {
         html = `
           <style>
-            .container { display: flex; flex-direction: column; gap: 8px }
+            .container {
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+            }
           </style>
           <div class="container">
-            <input type="text" value="{{myvar}}" oninput="updateMyVar" />
-            <div>Input value: {{ myvar }}</div>
+            <input
+              type="text"
+              value="{{myvar}}"
+              oninput="updateMyVar"
+              placeholder="Type here" />
+            <div>Input Value: {{ myvar }}</div>
           </div>
         `;
 
