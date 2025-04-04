@@ -108,6 +108,7 @@ customElements.define("ca-template", class extends Siput {
         position: sticky;
         top: 0;
         margin-bottom: 24px;
+        z-index: 999;
       }
     </style>
     <main>
