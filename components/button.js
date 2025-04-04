@@ -13,11 +13,12 @@ customElements.define("ca-button", class extends Siput {
         border: none;
         background: #588157;
         color: white;
-        padding: 8px 16px;
+        padding: 5px 12px;
         font-weight: 500;
         border-radius: 5px;
         outline: none;
-        height: 39px;
+        height: 33px;
+        font-size: 13px;
         cursor: pointer;
       }
       .outline {

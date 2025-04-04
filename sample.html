@@ -5,11 +5,26 @@
   </head>
   <body>
     <!-- Main Elements -->
-    <my-custom-element></my-custom-element>
+    <my-template>
+      <my-custom-element></my-custom-element>
+    </my-template>
 
     <!-- Scripts -->
     <script src="https://siput.dev/siput.js"></script>
     <script>
+      customElements.define("my-template", class extends Siput {
+        html = `
+          <div>
+            <div>
+              Web Components is awesome
+            </div>
+            <div style="border:solid 1px #CCC; padding: 8px;">
+              ${this.children_view}
+            </div>
+          </div>
+        `;
+      });
+
       customElements.define("my-custom-element", class extends Siput {
         html = `
           <style>

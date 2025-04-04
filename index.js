@@ -4,11 +4,13 @@ customElements.define("main-page", class extends Siput {
       .main {
         display: flex;
         flex-direction: column;
-        gap: 24px;
       }
     </style>
     <div class="main px">
       <page-tagline></page-tagline>
+      <h2 style="padding-top: 32px;">
+        Code Example
+      </h2>
       <page-sample-code></page-sample-code>
     </div>
   `;
@@ -65,11 +67,26 @@ customElements.define("page-sample-code", class extends Siput {
   </head>
   <body>
     <!-- Main Elements -->
-    <my-custom-element></my-custom-element>
+    <my-template>
+      <my-custom-element></my-custom-element>
+    </my-template>
 
     <!-- Scripts -->
     <script src="https://siput.dev/siput.js"></script>
     <script>
+      customElements.define("my-template", class extends Siput {
+        html = \`
+          <div>
+            <div>
+              Web Components is awesome
+            </div>
+            <div style="border:solid 1px #CCC; padding: 8px;">
+              \${this.children_view}
+            </div>
+          </div>
+        \`;
+      });
+
       customElements.define("my-custom-element", class extends Siput {
         html = \`
           <style>

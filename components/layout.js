@@ -5,8 +5,8 @@ customElements.define("ca-header", class extends Siput {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        padding-top: 24px !important;
-        padding-bottom: 24px !important;
+        padding-top: 16px !important;
+        padding-bottom: 16px !important;
         background: #FFFB;
         backdrop-filter: blur(8px);
       }
@@ -17,12 +17,12 @@ customElements.define("ca-header", class extends Siput {
         font-family: "Plus Jakarta Sans", sans-serif;
       }
       header .container-logo > img {
-        height: 36px;
+        height: 30px;
         object-fit: contain;
       }
       header .logo {
         font-weight: 800;
-        font-size: 24px;
+        font-size: 20px;
         color: #283618;
       }
       header .menu {
@@ -30,6 +30,7 @@ customElements.define("ca-header", class extends Siput {
         display: flex;
         align-items: center;
         gap: 36px;
+        font-size: 14px;
         font-weight: 500;
       }
       header .menu img {
@@ -103,6 +104,7 @@ customElements.define("ca-template", class extends Siput {
       .sticky-header {
         position: sticky;
         top: 0;
+        margin-bottom: 24px;
       }
     </style>
     <main>

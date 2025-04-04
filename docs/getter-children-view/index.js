@@ -1,9 +1,9 @@
 customElements.define("main-page", class extends Siput {
   html = `
-    <docs-template>
+    <docs-template active="getter_children_view">
       <div>
         <h2 style="margin-top: 0px">
-          Documentation
+          Getter <code>children_view()</code>
         </h2>
         TODO: add docs
       </div>

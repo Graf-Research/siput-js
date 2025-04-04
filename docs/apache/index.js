@@ -1,9 +1,9 @@
 customElements.define("main-page", class extends Siput {
   html = `
-    <docs-template>
+    <docs-template active="apache">
       <div>
         <h2 style="margin-top: 0px">
-          Documentation
+          Apache
         </h2>
         TODO: add docs
       </div>
