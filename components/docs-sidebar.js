@@ -48,7 +48,7 @@ customElements.define("docs-sidebar", class extends Siput {
         padding: 5px 0;
       }
       nav code {
-        background: #2d2d2d;
+        background:#707a73;
         color: white;
         font-size: 9px;
         padding: 3px 8px;

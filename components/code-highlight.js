@@ -12,11 +12,12 @@ customElements.define("code-highlight", class extends Siput {
         max-height: 400px;
       }
     </style>
-    <pre class="code line-numbers"><code class="language-{{lang}}">${this.children_view}</code></pre>
+    <pre class="code {{line_number_class}}"><code class="language-{{lang}}">${this.children_view}</code></pre>
   `;
 
   init() {
     this.data.lang.value = this.attr.lang ? this.attr.lang : 'html';
+    this.data.line_number_class.value = this.attr.hasOwnProperty('noline') ? '' : 'line-numbers';
   }
 
   'attr-lang'(val) {
