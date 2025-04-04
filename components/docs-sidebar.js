@@ -38,7 +38,7 @@ customElements.define("docs-sidebar", class extends Siput {
       }
       nav a {
         font-family: "Plus Jakarta Sans", sans-serif;
-        font-size: 15px;
+        font-size: 14px;
         color: #555;
         cursor: pointer;
       }
@@ -50,7 +50,7 @@ customElements.define("docs-sidebar", class extends Siput {
       nav code {
         background: #2d2d2d;
         color: white;
-        font-size: 10px;
+        font-size: 9px;
         padding: 3px 8px;
         border-radius: 4px;
         margin: 0 2px;
