@@ -140,7 +140,7 @@ customElements.define("page-sample-code", class extends Siput {
       }
     </style>
     <div class="page-sample-code">
-      <code-highlight>${this.#escapeHTML(this.html_code)}</code-highlight>
+      <code-highlight>${escapeHTML(this.html_code)}</code-highlight>
       <div>
         <div style="padding: 8px; background: #F7F7F7; font-weight: bold;">
           Output
@@ -149,10 +149,4 @@ customElements.define("page-sample-code", class extends Siput {
       </div>
     </div>
   `;
-
-  #escapeHTML(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
 });

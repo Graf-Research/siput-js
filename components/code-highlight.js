@@ -1,4 +1,8 @@
 customElements.define("code-highlight", class extends Siput {
+  static observedAttributes = [
+    'lang'
+  ];
+
   html = `
     <style>
       .code {
@@ -8,6 +12,14 @@ customElements.define("code-highlight", class extends Siput {
         max-height: 400px;
       }
     </style>
-    <pre class="code"><code class="language-html">${this.children_view}</code></pre>
+    <pre class="code line-numbers"><code class="language-{{lang}}">${this.children_view}</code></pre>
   `;
+
+  init() {
+    this.data.lang.value = this.attr.lang ? this.attr.lang : 'html';
+  }
+
+  'attr-lang'(val) {
+    this.data.lang.value = val;
+  }
 });

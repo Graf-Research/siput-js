@@ -11,7 +11,9 @@ customElements.define("docs-template", class extends Siput {
     </style>
     <div class="docs-template px">
       <docs-sidebar active="{{active}}"></docs-sidebar>
-      ${this.children_view}
+      <section>
+        ${this.children_view}
+      </section>
     </div>
   `;
 

@@ -77,7 +77,7 @@ customElements.define("ca-footer", class extends Siput {
         flex-direction: column;
         gap: 12px;
         font-size: 13px;
-        padding-top: 24px !important;
+        padding-top: 64px !important;
         padding-bottom: 24px !important;
       }
       footer .disclaimer {
