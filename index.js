@@ -38,7 +38,7 @@ customElements.define("page-tagline", class extends Siput {
     </style>
     <div class="container-tagline">
       <div class="tagline">
-        Zero Dependency + Reactive + Fast
+        Zero Dependency + Reactive + Modular
       </div>
       <div class="list-features">
         <div>

@@ -23,3 +23,11 @@ h1 {
 .px {
   padding: 12px 15%;
 }
+
+p {
+  line-height: 1.65;
+}
+
+li {
+  line-height: 1.95;
+}

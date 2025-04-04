@@ -33,6 +33,8 @@ customElements.define("docs-sidebar", class extends Siput {
         display: flex;
         flex-direction: column;
         gap: 12px;
+        white-space: nowrap;
+        padding-right: 24px;
       }
       nav a {
         font-family: "Plus Jakarta Sans", sans-serif;

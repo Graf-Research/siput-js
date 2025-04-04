@@ -54,8 +54,7 @@ customElements.define("ca-header", class extends Siput {
           Blog
         </a>
         <ca-button 
-          loading="{{loading_button}}"
-          $onclick="test">
+          $onclick="gotoGetStarted">
           Getting Started
         </ca-button>
         <a href="https://github.com/Graf-Research/siput-js">
@@ -65,15 +64,8 @@ customElements.define("ca-header", class extends Siput {
     </header>
   `;
 
-  init() {
-    this.data.loading_button.value = 'hide';
-  }
-
-  test() {
-    this.data.loading_button.value = 'show';
-    setTimeout(() => {
-      this.data.loading_button.value = 'hide';
-    }, 1000);
+  gotoGetStarted() {
+    window.location.href = '/docs/getting-started';
   }
 });
 
@@ -83,13 +75,24 @@ customElements.define("ca-footer", class extends Siput {
       footer {
         display: flex;
         flex-direction: column;
+        gap: 12px;
         font-size: 13px;
         padding-top: 24px !important;
         padding-bottom: 24px !important;
       }
+      footer .disclaimer {
+        color: #888;
+        font-size: 12px;
+        text-align: justify;
+      }
     </style>
     <footer class="px">
-      Copyright &copy; 2025 Graf Research
+      <div>
+        Copyright &copy; 2025 Graf Research
+      </div>
+      <div class="disclaimer">
+        THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+      </div>
     </footer>
   `;
 });
