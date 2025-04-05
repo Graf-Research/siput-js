@@ -1,5 +1,7 @@
 # Siput.JS
 
+⚠ **Caution**: this library is still on development, some features might be not working properly or missing. Use at your own risk.
+
 ## Usage
 
 1. Include script

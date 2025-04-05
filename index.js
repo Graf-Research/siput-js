@@ -7,6 +7,9 @@ customElements.define("main-page", class extends Siput {
       }
     </style>
     <div class="main px">
+      <div style="margin-top:24px; background: lightyellow; padding: 5px 9px;">
+        ⚠ <b>Caution</b>: this library is still on development, some features might be not working properly or missing. Use at your own risk.
+      </div>
       <page-tagline></page-tagline>
       <h2 style="padding-top: 32px;">
         Code Example
