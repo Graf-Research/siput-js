@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Example</title>
+  </head>
+  <body>
+    <!-- Main Elements -->
+    <my-dashboard></my-dashboard>
+
+    <!-- Scripts -->
+    <script src="https://siput.dev/siput.js"></script>
+    <script>
+      customElements.define("my-dashboard", class extends Siput {
+        html = `
+          <div>
+            <input
+              value="{{filter}}"
+              oninput="changeFilter"
+              placeholder="Search"
+            />
+            <div className="grid">
+              ${ Array(3000).fill('').map((_, i) => `<my-widget val="{{ filter }}" id="${i}" title="AAA"></my-widget>`).join('') }
+            </div>
+          </div>
+        `;
+
+        init() {
+          this.data.filter.value = '';
+        }
+
+        changeFilter(e) {
+          this.data.filter.value = e.target.value;
+        }
+      });
+
+      customElements.define("my-w1", class extends Siput {
+        static observedAttributes = [
+          'val'
+        ];
+        html = `
+          <div>{{ val }}</div>
+        `;
+
+        init() {
+          this.data.val.value = this.attr.val;
+          this.data.id.value = this.attr.id;
+        }
+
+        'attr-val'(val) {
+          if (val == this.attr.id) {
+            this.data.val.value = val + 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum';
+          }
+        }
+      });
+
+      customElements.define("my-w2", class extends Siput {
+        static observedAttributes = [
+          'val'
+        ];
+        html = `
+          <div>{{ val }}<my-w1 val="{{val}}" id="{{id}}"></my-w1></div>
+        `;
+
+        init() {
+          this.data.val.value = this.attr.val;
+          this.data.id.value = this.attr.id;
+        }
+
+        'attr-val'(val) {
+          if (val == this.attr.id) {
+            this.data.val.value = val;
+          }
+        }
+      });
+
+      customElements.define("my-w3", class extends Siput {
+        static observedAttributes = [
+          'val'
+        ];
+        html = `
+          <div>{{ val }}<my-w2 val="{{val}}" id="{{id}}"></my-w2></div>
+        `;
+
+        init() {
+          this.data.val.value = this.attr.val;
+          this.data.id.value = this.attr.id;
+        }
+
+        'attr-val'(val) {
+          if (val == this.attr) {
+            this.data.val.value = val;
+          }
+        }
+      });
+
+      customElements.define("my-w4", class extends Siput {
+        static observedAttributes = [
+          'val'
+        ];
+        html = `
+          <div>{{ val }}<my-w3 val="{{val}}" id="{{id}}"></my-w3></div>
+        `;
+
+        init() {
+          this.data.val.value = this.attr.val;
+          this.data.id.value = this.attr.id;
+        }
+
+        'attr-val'(val) {
+          if (val == this.attr) {
+            this.data.val.value = val;
+          }
+        }
+      });
+
+      customElements.define("my-w5", class extends Siput {
+        static observedAttributes = [
+          'val'
+        ];
+        html = `
+          <div>{{ val }}<my-w4 val="{{val}}" id="{{id}}"></my-w4><my-w4 val="{{val}}" id="{{id}}"></my-w4></div>
+        `;
+
+        init() {
+          this.data.val.value = this.attr.val;
+          this.data.id.value = this.attr.id;
+        }
+
+        'attr-val'(val) {
+          if (val == this.attr) {
+            this.data.val.value = val;
+          }
+        }
+      });
+
+      customElements.define("my-w6", class extends Siput {
+        static observedAttributes = [
+          'val',
+          'id'
+        ];
+        html = `
+          <div>{{ val }}<my-w5 val="{{val}}" id="{{id}}"></my-w5><my-w5 val="{{val}}" id="{{id}}"></my-w5><my-w5 val="{{val}}" id="{{id}}"></my-w5><my-w5 val="{{val}}" id="{{id}}"></my-w5></div>
+        `;
+
+        init() {
+          this.data.val.value = this.attr.val;
+          this.data.id.value = this.attr.id;
+        }
+
+        'attr-val'(val) {
+          if (val == this.attr) {
+            this.data.val.value = val;
+          }
+        }
+      });
+
+      customElements.define("my-widget", class extends Siput {
+        static observedAttributes = [
+          'title',
+          'val'
+        ];
+        html = `
+          <div>{{ title }} - {{ val }} - {{ datax }} {{ #renderw6 }}</div>
+        `;
+
+        init() {
+          this.data.title.value = this.attr.title + this.attr.id;
+          this.data.val.value = this.attr.val;
+          this.data.datax.value = new Date().getTime();
+          let total = 0;
+        }
+
+        'attr-title'(val) {
+          this.data.title.value = val;
+          this.data.datax.value = new Date().getTime();
+        }
+
+        'attr-val'(val) {
+          this.data.val.value = val;
+          if (val == this.attr.id) {
+            this.data['#renderw6'].value = `<my-w6 val="${val}" id="${this.attr.id}"></my-w6>`;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
