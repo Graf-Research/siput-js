@@ -51,3 +51,46 @@
 ```bash
 npx http-server -o . -c-1
 ```
+
+## Known Issues
+
+### Invalid HTML Parsing (intentionally from HTML spec)
+
+Element that semantically invalid by HTML spec, will be fail on parsing, ex:
+
+```html
+<tr>
+  <td>
+    {{ no }}
+  </td>
+  <td>
+    {{ nama }}
+  </td>
+  <td>
+    {{ email }}
+  </td>
+  <td>
+    {{ alamat }}
+  </td>
+</tr>
+```
+
+will not be parsed as ELEMENT_NODE, instead it become TEXT_NODE.
+
+Another similar issue found when create dynamic child render below:
+
+```html
+<table>
+  {{ #rows }}
+</table>
+```
+
+will be rearranged to be:
+
+
+```html
+{{ #rows }}
+<table>
+</table>
+```
+

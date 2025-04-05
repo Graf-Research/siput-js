@@ -1,17 +1,18 @@
 class Siput extends HTMLElement {
   __proxy_var = {};
-  __proxy_fn = {};
+  __proxy_var_fn = {};
   ref = {};
   is_data_ready = false;
   data = this.__proxy_var;
+  list_view = this.__proxy_lv;
   html = ``;
   use_shadow_root = false;
 
   custom_element = true;
 
   static stats = {
-    total_proxy: 0,
-    total_function: 0
+    total_proxy_var: 0,
+    total_var_function: 0,
   };
 
   static counter = 0;
@@ -21,21 +22,43 @@ class Siput extends HTMLElement {
     super();
   }
 
-  // uuidv4() {
-  //   return 'id' + "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
-  //     (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
-  //   ).replace(/\-/g, '');
-  // }
+  uuidv4() {
+    return 'id-' + "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+      (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+    ).replace(/\-/g, '');
+  }
 
   get attr() {
     var mapkv = {};
     for (const attribute of this.attributes) {
       if (attribute.name.startsWith('$')) {
-        let pn = this.parentNode;
-        while (pn && !pn.custom_element) {
-          pn = pn.parentNode;
+
+        mapkv[attribute.name] = (param) => {
+          let pn = this.parentNode;
+          while (pn && !pn.custom_element) {
+            pn = pn.parentNode;
+          }
+
+          // TODO: fix this mess
+          
+          // #1 attempt, check the component itself
+          if (pn[attribute.value]) {
+            pn[attribute.value].bind(pn)(param);
+            return;
+          }
+
+          // #2 attempt, check __parent (this coming from uuid element)
+          if (pn.__parent && pn.__parent[attribute.value]) {
+            pn.__parent[attribute.value].bind(pn.__parent)(param);
+            return;
+          }
+
+          // #3 attempt, check ___parent (this coming from custom element inside custom element)
+          if (pn.___parent && pn.___parent[attribute.value]) {
+            pn.___parent[attribute.value].bind(pn.___parent)(param);
+            return;
+          }
         }
-        mapkv[attribute.name] = pn[attribute.value].bind(pn);
       } else {
         mapkv[attribute.name] = attribute.value;
       }
@@ -53,16 +76,17 @@ class Siput extends HTMLElement {
     return t.content;
   }
 
-  extractVariables(text_str) {
-    const re = /{{\s*([a-zA-Z_$][\w$]*)\s*}}/g;
-    let match, list_var = [];
+  extractKeys(text_str) {
+    const re = /{{\s*(#?[a-zA-Z_$][\w$]*)\s*}}/g;
+    let match, list_key = [];
     while (match = re.exec(text_str)) {
-      list_var.push({
+      list_key.push({
         text: match[0],
-        var: match[1]
+        key: match[1],
+        position: match.index
       });
     }
-    return list_var;
+    return list_key;
   }
 
   init() {}
@@ -77,6 +101,35 @@ class Siput extends HTMLElement {
     }
   }
 
+  createProxyVarIfNotExist(node_var) {
+    if (!this.__proxy_var[node_var.key]) {
+      Siput.stats.total_proxy_var++;
+      this.__proxy_var[node_var.key] = new Proxy({ value: undefined }, {
+        set: (target, key, value) => {
+          target[key] = value;
+          for (const fn of this.__proxy_var_fn[node_var.key]) {
+            fn();
+          }
+          return true;
+        }
+      });
+    }
+  }
+
+  addProxyVarFn(node_var, fn) {
+    if (!this.__proxy_var_fn[node_var.key]) {
+      this.__proxy_var_fn[node_var.key] = [];
+    }
+    Siput.stats.total_var_function++;
+    this.__proxy_var_fn[node_var.key].push(fn);
+  }
+
+  static escapeHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }  
+
   connectedCallback() {
     const shadow = this.use_shadow_root ? this.attachShadow({ mode: "open" }) : this;
     const list_child_node = Array.from(this.childNodes.entries()).map(x => x[1]);
@@ -87,7 +140,7 @@ class Siput extends HTMLElement {
     do {
       current_node = tree_walker.nextNode();
       if (current_node) {
-        const node_object = { el: current_node };
+        let node_object = { el: current_node };
 
         if (current_node.nodeType == Node.ELEMENT_NODE && current_node.attributes && current_node.attributes.id && current_node.attributes.id.nodeValue == this.child_view_identifier) {
           child_element_dom = node_object;
@@ -110,36 +163,29 @@ class Siput extends HTMLElement {
                 case 'oninput':
                 case 'onclick':
                   current_node.removeAttribute(attr.nodeName);
-                  current_node.addEventListener(attr.nodeName.slice(2), e => this[attr.nodeValue](e));
+                  current_node.addEventListener(attr.nodeName.slice(2), e => {
+                    if (this.__parent && attr.nodeValue in this.__parent && typeof this.__parent[attr.nodeValue] == 'function') {
+                      this.__parent[attr.nodeValue](e);
+                      return;
+                    }
+                    if (attr.nodeValue in this && typeof this[attr.nodeValue] == 'function') {
+                      this[attr.nodeValue](e);
+                      return;
+                    }
+                    throw new Error(`Method "${attr.nodeValue}" doesnt exist on "this" or "__parent" scope`)
+                  });
                   break;
                 default:
                   const original_text_on_attr = String(attr.nodeValue);
-                  const list_var_on_attr = this.extractVariables(attr.nodeValue);
+                  const list_key_on_attr = this.extractKeys(attr.nodeValue);
 
-                  // initialize proxy variable store if not exist
-                  for (const node_var of list_var_on_attr) {
-                    if (!this.__proxy_var[node_var.var]) {
-                      Siput.stats.total_proxy++;
-                      this.__proxy_var[node_var.var] = new Proxy({ value: undefined }, {
-                        set: (target, key, value) => {
-                          target[key] = value;
-                          for (const fn of this.__proxy_fn[node_var.var]) {
-                            fn();
-                          }
-                          return true;
-                        }
-                      });
-                    }
-
-                    // add function that executed on proxy variable setter
-                    if (!this.__proxy_fn[node_var.var]) {
-                      this.__proxy_fn[node_var.var] = [];
-                    }
-                    Siput.stats.total_function++;
-                    this.__proxy_fn[node_var.var].push(() => {
+                  // initialize proxy key variable store if not exist
+                  for (const node_key of list_key_on_attr) {
+                    this.createProxyVarIfNotExist(node_key);
+                    this.addProxyVarFn(node_key, () => {
                       let text_content = original_text_on_attr;
-                      for (const d1_node_var of list_var_on_attr) {
-                        text_content = text_content.replace(new RegExp(`{{\\s*(${d1_node_var.var})\\s*}}`,"gm"), this.__proxy_var[d1_node_var.var].value);
+                      for (const d1_node_key of list_key_on_attr) {
+                        text_content = text_content.replace(new RegExp(`{{\\s*(#?${d1_node_key.key})\\s*}}`,"gm"), this.__proxy_var[d1_node_key.key].value);
                       }
                       node_object.el[attr.nodeName] = text_content;
                       node_object.el.setAttribute(attr.nodeName, text_content);
@@ -151,34 +197,35 @@ class Siput extends HTMLElement {
             break;
           case Node.TEXT_NODE:
             const original_text_on_node = String(current_node.textContent);
-            const list_var_on_node = this.extractVariables(current_node.textContent);
+            const list_key_on_node = this.extractKeys(current_node.textContent);
 
             // initialize proxy variable store if not exist
-            for (const node_var of list_var_on_node) {
-              if (!this.__proxy_var[node_var.var]) {
-                Siput.stats.total_proxy++;
-                this.__proxy_var[node_var.var] = new Proxy({ value: undefined }, {
-                  set: (target, key, value) => {
-                    target[key] = value;
-                    for (const fn of this.__proxy_fn[node_var.var]) {
-                      fn();
-                    }
-                    return true;
-                  }
-                });
-              }
-
-              // add function that executed on proxy variable setter
-              if (!this.__proxy_fn[node_var.var]) {
-                this.__proxy_fn[node_var.var] = [];
-              }
-              Siput.stats.total_function++;
-              this.__proxy_fn[node_var.var].push(() => {
+            for (const node_key of list_key_on_node) {
+              this.createProxyVarIfNotExist(node_key);
+              this.addProxyVarFn(node_key, () => {
                 let text_content = original_text_on_node;
-                for (const d1_node_var of list_var_on_node) {
-                  text_content = text_content.replace(new RegExp(`{{\\s*(${d1_node_var.var})\\s*}}`,"gm"), this.__proxy_var[d1_node_var.var].value);
+
+                for (const d1_node_key of list_key_on_node) {
+                  text_content = text_content.replace(new RegExp(`{{\\s*(#?${d1_node_key.key})\\s*}}`,"gm"), this.__proxy_var[d1_node_key.key].value);
                 }
-                node_object.el.textContent = text_content;
+                if (node_key.key.startsWith('#')) {
+                  const element_name = this.uuidv4();
+                  customElements.define(element_name, class extends Siput {
+                    html = text_content;
+                  });
+                  
+                  const old_reference = node_object.el;
+                  const new_element = document.createElement(element_name);
+
+                  // this may be really stupid, but it works anyway, cheers :)
+                  new_element.__parent = this.__parent ? this.__parent : this;
+
+                  node_object.el = node_object.el.parentNode.insertBefore(new_element, node_object.el);
+
+                  old_reference.remove();
+                } else {
+                  node_object.el.textContent = text_content;
+                }
               });
             }
             break;
@@ -187,6 +234,7 @@ class Siput extends HTMLElement {
     } while (current_node !== null);
     this.is_data_ready = true;
     shadow.appendChild(this.custom_content);
+    shadow.firstChild.___parent = this;
     this.init();
 
     // add child view

@@ -25,6 +25,8 @@ customElements.define("docs-sidebar", class extends Siput {
     ['attribute_ref', 'Attribute <code>ref</code>', '/docs/attribute-ref', ''],
     ['attribute_use_shadow_root', 'Attribute <code>use_shadow_root</code>', '/docs/attribute-use-shadow-root', ''],
     ['static_stats', 'Static <code>stats</code>', '/docs/static-stats', ''],
+    ['known_issues', 'Known Issues', '/docs/known-issues', ''],
+    ['faq', 'FAQ', '/docs/faq', ''],
   ];
 
   html = `
