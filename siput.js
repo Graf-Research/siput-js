@@ -8,8 +8,6 @@ class Siput extends HTMLElement {
   html = ``;
   use_shadow_root = false;
 
-  custom_element = true;
-
   static stats = {
     total_proxy_var: 0,
     total_var_function: 0,
@@ -28,6 +26,27 @@ class Siput extends HTMLElement {
     ).replace(/\-/g, '');
   }
 
+  /**
+   * 
+   * Rules:
+   * 1. Attributes that starts with $ sign, will invoked as a function 
+   *    on the element scope, example:
+   * 
+   *    class MyElement extends Siput {
+   *      html = `
+   *        <child-el $onbuka="buka">   ---------- invokes (scope MyElement).buka(params)
+   *        </child-el>
+   *      `
+   *      buka(params) {   ----------------------- expecting this action/function exist
+   *        //
+   *      }
+   *    }
+   * 
+   * 2. Other attributes will be store as string
+   * 
+   * @returns object element attributes
+   * example: { name, props1, $onupdate, $onbuka }
+   */
   get attr() {
     var mapkv = {};
     for (const attribute of this.attributes) {
@@ -35,11 +54,9 @@ class Siput extends HTMLElement {
 
         mapkv[attribute.name] = (param) => {
           let pn = this.parentNode;
-          while (pn && !pn.custom_element) {
+          while (pn && !(pn instanceof Siput)) {
             pn = pn.parentNode;
           }
-
-          // TODO: fix this mess
           
           // #1 attempt, check the component itself
           if (pn[attribute.value]) {
@@ -47,17 +64,19 @@ class Siput extends HTMLElement {
             return;
           }
 
-          // #2 attempt, check __parent (this coming from uuid element)
-          if (pn.__parent && pn.__parent[attribute.value]) {
-            pn.__parent[attribute.value].bind(pn.__parent)(param);
+          // #2 attempt, check __scope_string_html (this coming from uuid: element which variable starts with "#")
+          if (pn.__scope_string_html && pn.__scope_string_html[attribute.value]) {
+            pn.__scope_string_html[attribute.value].bind(pn.__scope_string_html)(param);
             return;
           }
 
-          // #3 attempt, check ___parent (this coming from custom element inside custom element)
-          if (pn.___parent && pn.___parent[attribute.value]) {
-            pn.___parent[attribute.value].bind(pn.___parent)(param);
+          // #3 attempt, check __scope_custom_element (this coming from custom element inside custom element)
+          if (pn.__scope_custom_element && pn.__scope_custom_element[attribute.value]) {
+            pn.__scope_custom_element[attribute.value].bind(pn.__scope_custom_element)(param);
             return;
           }
+
+          throw new Error(`action "${attribute.value}" not found`);
         }
       } else {
         mapkv[attribute.name] = attribute.value;
@@ -66,10 +85,19 @@ class Siput extends HTMLElement {
     return mapkv;
   }
 
+  /**
+   * 
+   * Temporary children view, will be replaced later with element childNodes
+   */
   get children_view() {
     return `<div id="${this.child_view_identifier}"></div>`;
   }
 
+  /**
+   * 
+   * @param {string} html html string template
+   * @returns DocumentFragment node
+   */
   parseHTML(html) {
     var t = document.createElement('template');
     t.innerHTML = html.trim();
@@ -164,15 +192,15 @@ class Siput extends HTMLElement {
                 case 'onclick':
                   current_node.removeAttribute(attr.nodeName);
                   current_node.addEventListener(attr.nodeName.slice(2), e => {
-                    if (this.__parent && attr.nodeValue in this.__parent && typeof this.__parent[attr.nodeValue] == 'function') {
-                      this.__parent[attr.nodeValue](e);
+                    if (this.__scope_string_html && attr.nodeValue in this.__scope_string_html && typeof this.__scope_string_html[attr.nodeValue] == 'function') {
+                      this.__scope_string_html[attr.nodeValue](e);
                       return;
                     }
                     if (attr.nodeValue in this && typeof this[attr.nodeValue] == 'function') {
                       this[attr.nodeValue](e);
                       return;
                     }
-                    throw new Error(`Method "${attr.nodeValue}" doesnt exist on "this" or "__parent" scope`)
+                    throw new Error(`Method "${attr.nodeValue}" doesnt exist on "this" or "__scope_string_html" scope`)
                   });
                   break;
                 default:
@@ -218,7 +246,7 @@ class Siput extends HTMLElement {
                   const new_element = document.createElement(element_name);
 
                   // this may be really stupid, but it works anyway, cheers :)
-                  new_element.__parent = this.__parent ? this.__parent : this;
+                  new_element.__scope_string_html = this.__scope_string_html ? this.__scope_string_html : this;
 
                   node_object.el = node_object.el.parentNode.insertBefore(new_element, node_object.el);
 
@@ -234,7 +262,7 @@ class Siput extends HTMLElement {
     } while (current_node !== null);
     this.is_data_ready = true;
     shadow.appendChild(this.custom_content);
-    shadow.firstChild.___parent = this;
+    shadow.firstChild.__scope_custom_element = this;
     this.init();
 
     // add child view

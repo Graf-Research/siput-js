@@ -50,8 +50,8 @@ customElements.define("ca-header", class extends Siput {
         <a href="/docs">
           Docs
         </a>
-        <a href="/blog">
-          Blog
+        <a href="/playground">
+          Playground
         </a>
         <ca-button 
           $onclick="gotoGetStarted">
