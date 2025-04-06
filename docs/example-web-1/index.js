@@ -6,7 +6,7 @@ customElements.define("main-page", class extends Siput {
           background: white;
           border: none;
           width: 100%;
-          height: 300px;
+          height: 280px;
           background: white;
           border-radius: 12px;
           overflow: hidden;
