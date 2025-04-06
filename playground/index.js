@@ -82,6 +82,16 @@ var initial_code = `<!DOCTYPE html>
   <head>
     <title>Example</title>
   </head>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+    body {
+      font-family: "Libre Franklin", sans-serif;
+      font-optical-sizing: auto;
+      font-style: normal;
+      padding: 0;
+      margin: 0;
+    }
+  </style>
   <body>
     <!-- Main Elements -->
     <my-template>
@@ -93,13 +103,11 @@ var initial_code = `<!DOCTYPE html>
     <script>
       customElements.define("my-template", class extends Siput {
         html = \`
-          <div>
+          <div style="padding: 12px; display: flex; flex-direction: column; gap: 8px;">
             <div>
               Web Components is awesome
             </div>
-            <div style="border:solid 1px #CCC; padding: 8px;">
-              \${this.children_view}
-            </div>
+            \${this.children_view}
           </div>
         \`;
       });
@@ -111,6 +119,17 @@ var initial_code = `<!DOCTYPE html>
               display: flex;
               flex-direction: column;
               gap: 8px;
+              border:solid 1px #CCC;
+              border-radius: 4px;
+              padding: 8px;
+            }
+            input {
+              padding: 7px 12px;
+              border: none;
+              background: #F8F8F8;
+              border-radius: 4px;
+              outline: none;
+              font-size: 16px;
             }
           </style>
           <div class="container">
@@ -119,7 +138,7 @@ var initial_code = `<!DOCTYPE html>
               value="{{myvar}}"
               oninput="updateMyVar"
               placeholder="Type here" />
-            <div>Input Value: {{ myvar }}</div>
+            <div>Input Value: <b>{{ myvar }}</b></div>
           </div>
         \`;
 
