@@ -8,13 +8,13 @@ customElements.define("main-page", class extends Siput {
         <p>
           Create a html file, add script tag below:
         </p>
-        <code-highlight>${escapeHTML(`
+        <code-highlight>${Siput.escapeHTML(`
 <script src="https://siput.dev/siput.js"></script>
         `.trim())}</code-highlight>
         <p>
           Your html file might look like this:
         </p>
-        <code-highlight>${escapeHTML(`
+        <code-highlight>${Siput.escapeHTML(`
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -31,7 +31,7 @@ customElements.define("main-page", class extends Siput {
         <p>
           Create your first component
         </p>
-        <code-highlight lang="js">${escapeHTML(`
+        <code-highlight lang="js">${Siput.escapeHTML(`
 customElements.define("my-component", class extends Siput {
   html = \`
     <div>
@@ -47,7 +47,7 @@ customElements.define("my-component", class extends Siput {
         <p>
           Use your component as html element
         </p>
-        <code-highlight lang="html">${escapeHTML(`
+        <code-highlight lang="html">${Siput.escapeHTML(`
 <!DOCTYPE html>
 <html lang="en">
   <head>

@@ -2,14 +2,6 @@ customElements.define("main-page", class extends Siput {
   html = `
     <docs-template active="start_development">
       <style>
-        code.small {
-          background: goldenrod;
-          color: white;
-          font-size: 10px;
-          padding: 3px 8px;
-          border-radius: 4px;
-          margin: 0 2px;
-        }
         .filename {
           font-style: italic;
         }
@@ -24,7 +16,7 @@ customElements.define("main-page", class extends Siput {
           Our recommendation to start a development by using npm package like <code class="small">http-server</code> or <code class="small">serve</code> or similar tools.
         </p>
         <p>
-          Make sure you already have <code class="small">node</code> <code class="small">npm</code> and <code class="small">npx</code>, we recommended install it with
+          In this example, I will use Node.JS program since I familiar with the tools (you can use any other programs/tools as a file server). Now, make sure you already have <code class="small">node</code> <code class="small">npm</code> and <code class="small">npx</code>, we recommended install it with
           <a target="_blank" href="https://github.com/nvm-sh/nvm"><b>Node Version Manager</b></a>.
         </p>
         <h3>
@@ -33,29 +25,34 @@ customElements.define("main-page", class extends Siput {
         <p>
           Create project folder, <code class="small">cd</code> into folder
         </p>
-        <code-highlight noline lang="bash">${escapeHTML(`
+        <code-highlight noline lang="bash">${Siput.escapeHTML(`
 mkdir my-website
 cd my-website
         `.trim())}</code-highlight>
         <p>
-          Run your file server program
+          Run your file server program:
         </p>
-        <code-highlight noline lang="bash">${escapeHTML(`
-npx serve
+        <code-highlight noline lang="bash">${Siput.escapeHTML(`
+npx http-server -o .
         `.trim())}</code-highlight>
         <p>
           Sometimes you want to adjust cache behavior of file server, since it most likely store cache in the browser and you may not like it.
-          To adjust it, here a sample with different file server program:
+          To adjust it, here a sample:
         </p>
-        <code-highlight noline lang="bash">${escapeHTML(`
+        <code-highlight noline lang="bash">${Siput.escapeHTML(`
 npx http-server -o . -c-1
         `.trim())}</code-highlight>
-        <br/>
+        <p style="font-style:italic">
+          Note: the program that running file server above can be different, you can use your own favorite tools, or even you can open your html file in browser locally. 
+        </p>
         <hr/>
+        <h3>
+          Files Structure
+        </h3>
         <p>
           Our recommendation folder structure looks like below:
         </p>
-        <code-highlight noline lang="bash">${escapeHTML(`
+        <code-highlight noline lang="bash">${Siput.escapeHTML(`
 my-website
 │
 ├── login-page   ------------- sub page
@@ -80,7 +77,7 @@ my-website
         <div class="filename">
           index.html
         </div>
-        <code-highlight>${escapeHTML(`
+        <code-highlight>${Siput.escapeHTML(`
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -99,7 +96,7 @@ my-website
         <div class="filename">
           index.js
         </div>
-        <code-highlight lang="js">${escapeHTML(`
+        <code-highlight lang="js">${Siput.escapeHTML(`
 customElements.define("my-component", class extends Siput {
   html = \`
     <div>
