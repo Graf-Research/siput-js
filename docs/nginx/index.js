@@ -25,6 +25,13 @@ server {
           add cache headers on its own. The cache config will set no-cache expression on some files and keep the files up-to-date if there 
           are some code updates on your website.
         </p>
+        <br/>
+        <ca-anchor 
+          href="/docs/components"
+          bigger 
+          outline>
+          Next: Components
+        </ca-anchor>
       </div>
     </docs-template>
   `;

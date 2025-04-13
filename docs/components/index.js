@@ -74,6 +74,13 @@ customElements.define("custom-component", class extends Siput {
             description="Siput.JS statistics on a page, like: total Proxy usage, functions created, and others">
           </component-feature>
         </div>
+        <br/>
+        <ca-anchor 
+          href="/docs/custom-elements"
+          bigger 
+          outline>
+          Next: Custom Elements
+        </ca-anchor>
       </div>
     </docs-template>
   `;

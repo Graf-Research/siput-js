@@ -35,6 +35,13 @@ customElements.define("my-other-component", class extends Siput {
   </body>
 </html>
         `.trim())}</code-highlight>
+        <br/>
+        <ca-anchor 
+          href="/docs/class-siput"
+          bigger 
+          outline>
+          Next: Class Siput
+        </ca-anchor>
       </div>
     </docs-template>
   `;
