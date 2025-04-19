@@ -218,6 +218,8 @@ class Siput extends HTMLElement {
                 // TODO: add more cases
                 case 'oninput':
                 case 'onclick':
+                case 'onkeyup':
+                case 'onkeydown':
                   current_node.removeAttribute(attr.nodeName);
                   current_node.addEventListener(attr.nodeName.slice(2), e => {
                     if (this.__scope_string_html && attr.nodeValue in this.__scope_string_html && typeof this.__scope_string_html[attr.nodeValue] == 'function') {
